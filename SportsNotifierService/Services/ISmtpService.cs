@@ -1,6 +1,8 @@
+using MimeKit;
+
 namespace SportsNotifierService.Services;
 
 public interface ISmtpService
 {
-    public void FakeEmail();
+    public Task SendEmailAsync(MimeMessage message);
 }

@@ -1,5 +1,6 @@
-using System.Net.Mail;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
+using MimeKit;
 using SportsNotifierService.Model;
 
 namespace SportsNotifierService.Services;
@@ -7,25 +8,19 @@ namespace SportsNotifierService.Services;
 public class SmtpService (IOptions<SmtpOptions> settings) : ISmtpService
 {
     private readonly SmtpOptions _settings = settings.Value;
-    
-    public void FakeEmail()
+
+    public async Task SendEmailAsync(MimeMessage message)
     {
-        using var mail = new MailMessage();
+        message.To.Add(new MailboxAddress(_settings.To, _settings.To));
+        message.From.Add(new MailboxAddress("Sports Notifier", _settings.From));
         
-        mail.From = new MailAddress(_settings.From);
-        mail.To.Add(new MailAddress(_settings.To));
+        using var smtpClient = new SmtpClient();
         
-        mail.Subject = "Sports Notifier Service";
-        
-        mail.Body = "Hello World!";
-        
-        using var smtp = new SmtpClient(_settings.Server, _settings.Port);
+        await smtpClient.ConnectAsync(_settings.Server, _settings.Port, _settings.EnableSsl);
         
         if (!string.IsNullOrEmpty(_settings.Username) && !string.IsNullOrEmpty(_settings.Password))
-            smtp.Credentials = new System.Net.NetworkCredential(_settings.Username, _settings.Password);
-        
-        smtp.EnableSsl = _settings.EnableSsl;
-        
-        smtp.Send(mail);
+            await smtpClient.AuthenticateAsync(_settings.Username, _settings.Password);
+
+        await smtpClient.SendAsync(message);
     }
 }
