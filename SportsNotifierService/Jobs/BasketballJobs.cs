@@ -3,7 +3,7 @@ using TickerQ.Utilities.Base;
 
 namespace SportsNotifierService.Jobs;
 
-public class BasketballJobs(ILogger<BasketballJobs> logger, IBasketballScraper scraper)
+public class BasketballJobs(ILogger<BasketballJobs> logger, IBasketballScraper scraper, ISmtpService smtpService)
 {
     [TickerFunction($"{nameof(BasketballJobs)}.{nameof(ScrapeBasketballResults)}", "0 0 16 * * *")]
     public async Task ScrapeBasketballResults()
@@ -28,5 +28,7 @@ public class BasketballJobs(ILogger<BasketballJobs> logger, IBasketballScraper s
             
             Console.WriteLine();
         }
+        
+        smtpService.FakeEmail();
     }
 }
