@@ -11,6 +11,7 @@ var app = builder.Build();
 
 app.UseTickerQ();
 
+// TODO move to controller
 app.MapPost("/basketball/scrapeNow", async (ITimeTickerManager<TimeTickerEntity> manager) =>
 {
     await manager.AddAsync(new TimeTickerEntity

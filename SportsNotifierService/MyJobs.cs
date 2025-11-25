@@ -5,6 +5,7 @@ namespace SportsNotifierService;
 public class MyJobs
 {
     private readonly ILogger<MyJobs> _logger;
+    private readonly BasketballScraper _basketballScraper = new ();
 
     public MyJobs(ILogger<MyJobs> logger)
     {
@@ -15,5 +16,8 @@ public class MyJobs
     public void ScrapeBasketballResults()
     {
         _logger.LogInformation("Starting ScrapeBasketBallResults");
+        
+        _basketballScraper.Load();
+        _logger.LogInformation("ScrapeBasketballResults finished");
     }
 }
