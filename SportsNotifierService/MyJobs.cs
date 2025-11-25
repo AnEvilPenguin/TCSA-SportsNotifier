@@ -10,10 +10,10 @@ public class MyJobs
     {
         _logger = logger;
     }
-
-    [TickerFunction("CleanUpLogs", "0 */1 * * * *")]
-    public void CleanUpLogs()
+    
+    [TickerFunction("ScrapeBasketballResults", "0 0 16 * * *")]
+    public void ScrapeBasketballResults()
     {
-        _logger.LogInformation("Cleaning up Logs");
+        _logger.LogInformation("Starting ScrapeBasketBallResults");
     }
 }
