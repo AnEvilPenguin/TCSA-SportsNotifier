@@ -10,9 +10,23 @@ public class BasketballJobs(ILogger<BasketballJobs> logger, IBasketballScraper s
     {
         logger.LogDebug("Starting ScrapeBasketballResults");
 
-        if (await scraper.Load())
-            logger.LogDebug("ScrapeBasketballResults loaded");
-        else
-            logger.LogDebug("ScrapeBasketballResults not loaded");
+        if (!await scraper.Load())
+        {
+            logger.LogError("ScrapeBasketballResults - Document not loaded");
+            return;
+        }
+            
+        var scores = scraper.GetBasketballScores();
+
+        foreach (var score in scores)
+        {
+            Console.WriteLine($"{score.Home.TeamName}: {score.Home.Score}");
+            Console.WriteLine($"{score.Away.TeamName}: {score.Away.Score}");
+            
+            if (score.IsFinal)
+                Console.WriteLine($"Final");
+            
+            Console.WriteLine();
+        }
     }
 }
