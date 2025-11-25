@@ -8,7 +8,7 @@ namespace SportsNotifierService.Jobs;
 
 public class BasketballJobs(ILogger<BasketballJobs> logger, IBasketballScraper scraper, ISmtpService smtpService)
 {
-    [TickerFunction($"{nameof(BasketballJobs)}.{nameof(ScrapeBasketballResults)}", "0 0 16 * * *")]
+    [TickerFunction($"{nameof(BasketballJobs)}.{nameof(ScrapeBasketballResults)}")]
     public async Task ScrapeBasketballResults()
     {
         logger.LogDebug("Starting ScrapeBasketballResults");
